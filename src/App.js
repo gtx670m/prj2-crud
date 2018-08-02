@@ -3,6 +3,7 @@ import './App.css';
 import TaskForm from './components/TaskForm';
 import Control from './components/Control';
 import TaskList from './components/TaskList';
+
 var randomString = require('random-string');
 
 class App extends Component {
@@ -75,7 +76,9 @@ class App extends Component {
   }
   updateStatus = (id) => {
     var { tasks } = this.state;
-    var index = this.findIndex(id);
+    // var index = this.findIndex(id);
+    var index = tasks.findIndex((task, index) => { return id === task.id });
+    console.log(index);
     if (index !== -1) {
 
       tasks[index].status = !tasks[index].status
@@ -87,7 +90,7 @@ class App extends Component {
   }
   deleteItem = (id) => {
     var { tasks } = this.state;
-    var index = this.findIndex(id);
+    var index = tasks.findIndex((task, index) => { return id === task.id });
     if (index !== -1) {
       tasks.splice(index, 1);
       this.setState({
@@ -97,19 +100,20 @@ class App extends Component {
     }
     this.closeTaskForm();
   }
-  findIndex = (id) => {
-    var { tasks } = this.state;
-    var result = -1;
-    tasks.forEach((task, index) => {
-      if (id === task.id) {
-        result = index;
-      }
-    });
-    return result;
-  }
+  // findIndex = (id) => {
+  //   var { tasks } = this.state;
+  //   var result = -1;
+  //   tasks.forEach((task, index) => {
+  //     if (id === task.id) {
+  //       result = index;
+  //     }
+  //   });
+  //   return result;
+  // }
+  
   editItem = (id) => {
     var { tasks } = this.state;
-    var index = this.findIndex(id);
+    var index = tasks.findIndex((task, index) => { return id === task.id });
     var editingTaskContent = tasks[index];
     this.setState({
       editingTaskContent: editingTaskContent
@@ -167,13 +171,13 @@ class App extends Component {
     }
     if (sortBy === 'name') {
       tasks.sort((a, b) => {
-        if(a.name > b.name) return sortValue;
+        if (a.name > b.name) return sortValue;
         else if (a.name < b.name) return -sortValue;
         else return 0;
       })
     } else {
       tasks.sort((a, b) => {
-        if(a.status > b.status) return -sortValue;
+        if (a.status > b.status) return -sortValue;
         else if (a.status < b.status) return sortValue;
         else return 0;
       })
